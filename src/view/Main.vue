@@ -18,9 +18,9 @@
         <button type="submit" class="form-btn">VER VACACIONES</button>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <button type="button" @click="volver" class="form-btn">VOLVER</button>
-      </div>
+      </div> -->
     </form>
 
     <!-- Aquí mostramos la información decodificada del token -->

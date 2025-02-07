@@ -3,8 +3,8 @@
     <h2 class="form-title">Iniciar sesión</h2>
     <form @submit.prevent="login" class="form">
       <div class="form-group">
-        <label for="username">Nombre de usuario:</label>
-        <input type="text" id="username" v-model="username" required />
+        <label for="username">DNI:</label>
+        <input type="text" id="username" v-model="dni" required />
       </div>
       <div class="form-group">
         <label for="password">Contraseña:</label>
@@ -23,7 +23,7 @@ import BASE_URL from '../const/BaseUrl.js';
 export default {
   data() {
     return {
-      username: '',
+      dni: '',
       password: '',
     };
   },
@@ -31,7 +31,7 @@ export default {
     async login() {
       try {
         const response = await axios.post(BASE_URL + 'auth/login', {
-          username: this.username.trim().toUpperCase(),
+          dni: this.dni.trim().toUpperCase(),
           password: this.password.trim().toUpperCase(),
         });
 

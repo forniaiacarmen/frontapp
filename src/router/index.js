@@ -2,8 +2,6 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
 
-// Importa tus vistas (componentes de las páginas)
-//import Home from '../views/Home.vue';
 import Login from '../view/Login.vue';
 import Register from '../view/Register.vue';
 import Main from '../view/Main.vue';

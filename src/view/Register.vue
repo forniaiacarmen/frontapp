@@ -5,6 +5,7 @@
       <div class="form-group">
         <label for="dni">DNI:</label>
         <input type="text" id="dni" v-model="dni" required />
+        <p v-if="dniError" class="error-message">El DNI no es válido.</p>
       </div>
 
       <div class="form-group">
@@ -30,7 +31,7 @@
           <option value="USER">Usuario</option>
         </select>
       </div>
-      <button type="submit" class="submit-btn">Registrarse</button>
+      <button type="submit" class="submit-btn" :disabled="dniError">Registrarse</button>
     </form>
     <p class="login-link">¿Ya tienes cuenta? <router-link to="/">Inicia sesión aquí</router-link></p>
   </div>
@@ -50,31 +51,50 @@ export default {
       lastname: "",
       role: "USER",
       isRegistered: false,
+      dniError: false, // Nuevo estado para error de DNI
     };
   },
   methods: {
+    // Función para validar el formato del DNI
+    validateDNI(dni) {
+      // Usamos una expresión regular para validar el formato del DNI (8 dígitos + 1 letra)
+      const dniRegex = /^[0-9]{8}[a-z]{1}$/;
+      return dniRegex.test(dni);
+    },
     async register() {
       if (this.password !== this.confirmPassword) {
-        alert("Las contraseñas no coinciden");
-        return;
-      }
+      alert("Las contraseñas no coinciden");
+      return;
+    }
 
-      try {
-        const response = await axios.post(BASE_URL+"auth/register", {
-          dni: this.dni.trim().toUpperCase(),
-          password: this.password.trim().toUpperCase() ,
-          firstname: this.firstname.trim().toUpperCase() ,
-          lastname: this.lastname.trim().toUpperCase() ,
-          role: this.role,
-        });
+    // Validar el formato del DNI
+    if (!dniRegex.test(this.dni)) {
+      alert("El DNI no es válido. Debe tener 8 números seguidos de una letra en minúscula.");
+      return;
+    }
 
-        alert("¡Registro exitoso! Token guardado.");
-        localStorage.setItem("token", response.data.token);
-        this.isRegistered = true;
-        this.$router.push("/main");
-      } catch (error) {
-        console.error("Error al registrarse:", error);
-      }
+    try {
+      const response = await axios.post(BASE_URL + "auth/register", {
+        dni: this.dni.trim().toUpperCase(),
+        password: this.password.trim().toUpperCase(),
+        firstname: this.firstname.trim().toUpperCase(),
+        lastname: this.lastname.trim().toUpperCase(),
+        role: this.role,
+      });
+
+      alert("¡Registro exitoso! Token guardado.");
+      localStorage.setItem("token", response.data.token);
+      this.isRegistered = true;
+      this.$router.push("/main");
+    } catch (error) {
+      console.error("Error al registrarse:", error);
+    }
+    },
+  },
+  watch: {
+    dni(newDni) {
+      // Validar el DNI cada vez que el valor cambie
+      this.dniError = !this.validateDNI(newDni);
     },
   },
 };
@@ -151,6 +171,13 @@ export default {
 
 .login-link a:hover {
   text-decoration: underline;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 /* Media Queries para hacer el formulario responsive */
