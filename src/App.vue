@@ -1,6 +1,6 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <Login></Login>
+  <!-- <Login></Login> -->
   <!-- <Register></Register> -->
   <router-view></router-view>
 </template>
