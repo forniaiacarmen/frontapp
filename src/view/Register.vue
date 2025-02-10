@@ -83,7 +83,9 @@ export default {
       });
 
       alert("¡Registro exitoso! Token guardado.");
-      localStorage.setItem("token", response.data.token);
+      this.$store.dispatch('saveToken', response.data.token);
+
+//    localStorage.setItem("token", response.data.token);
       this.isRegistered = true;
       this.$router.push("/main");
     } catch (error) {

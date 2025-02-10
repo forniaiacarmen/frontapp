@@ -35,16 +35,26 @@ export default {
           password: this.password.trim().toUpperCase(),
         });
 
-        // Almacenar el token en localStorage
-        localStorage.setItem('token', response.data.token);
-
-        // Redirigir al Home (o a cualquier otra página)
-        alert('¡Inicio de sesión exitoso!');
-        this.$router.push("/main");
-
+        if (response && response.data && response.data.token) {
+          // Usar Vuex para guardar el token
+          this.$store.dispatch('saveToken', response.data.token);
+          alert('¡Inicio de sesión exitoso!');
+          this.$router.push("/main");
+        } else {
+          throw new Error('No se recibió un token');
+        }
       } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        alert('Hubo un error al iniciar sesión');
+        if (error.response) {
+          console.error('Error en la respuesta:', error.response.data);
+          alert('Error en la respuesta de la API');
+        } else if (error.request) {
+          console.error('No se recibió respuesta:', error.request);
+          alert('No se recibió respuesta del servidor');
+        } else {
+          console.error('Error general:', error.message);
+          alert('Hubo un error al intentar iniciar sesión');
+        }
       }
     },
   },
